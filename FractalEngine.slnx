@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FractalEngine.Cli/FractalEngine.Cli.csproj" />
+    <Project Path="src/FractalEngine.Core/FractalEngine.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FractalEngine.Tests/FractalEngine.Tests.csproj" />
+  </Folder>
+</Solution>
