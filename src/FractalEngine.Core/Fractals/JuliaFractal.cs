@@ -2,13 +2,28 @@ using System.Numerics;
 
 namespace FractalEngine.Core.Fractals
 {
-    internal class JuliaFractal
+    public class JuliaFractal : IFractal
     {
-        public readonly Complex _c;
-        public JuliaFractal(Complex c) => _c = c;
-        public Complex IterationRule(Complex z)
+        private readonly Complex _c;
+        private readonly int _maxIterations;
+        private readonly double _bailoutRadius;
+
+        public JuliaFractal(Complex c, int maxIterations, double bailoutRadius)
         {
-            return Complex.Add(Complex.Multiply(z,z), _c);
+            _c = c;
+            _maxIterations = maxIterations;
+            _bailoutRadius = bailoutRadius;
+        }
+
+        public int GetIterationCount(Complex z)
+        {
+            int iterations = 0;
+            while (z.Magnitude < _bailoutRadius && iterations < _maxIterations)
+            {
+                z = (z * z) + _c;
+                iterations++;
+            }
+            return iterations;
         }
     }
 }

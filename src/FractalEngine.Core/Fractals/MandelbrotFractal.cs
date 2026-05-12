@@ -2,12 +2,27 @@
 
 namespace FractalEngine.Core.Fractals
 {
-    internal class MandelbrotFractal
+    public class MandelbrotFractal : IFractal
     {
-        public readonly Complex _z0 = Complex.Zero;
-        public Complex IterationRule(Complex z, Complex c)
+        private readonly int _maxIterations;
+        private readonly double _bailoutRadius;
+
+        public MandelbrotFractal(int maxIterations, double bailoutRadius)
         {
-            return Complex.Add(Complex.Multiply(z,z), c);
+            _maxIterations = maxIterations;
+            _bailoutRadius = bailoutRadius;
+        }
+
+        public int GetIterationCount(Complex c)
+        {
+            int iterations = 0;
+            Complex z = Complex.Zero;
+            while (z.Magnitude < _bailoutRadius && iterations < _maxIterations)
+            {
+                z = (z * z) + c;
+                iterations++;
+            }
+            return iterations;
         }
     }
 }
