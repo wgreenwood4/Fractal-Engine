@@ -2,27 +2,26 @@
 
 namespace FractalEngine.Core.Fractals
 {
-    public class MandelbrotFractal : IFractal
+    public class MandelbrotFractal : Fractal
     {
-        private readonly int _maxIterations;
-        private readonly double _bailoutRadius;
-
-        public MandelbrotFractal(int maxIterations, double bailoutRadius)
+        public MandelbrotFractal(int maxIterations, double bailoutRadius) :
+            base(maxIterations, bailoutRadius)
         {
-            _maxIterations = maxIterations;
-            _bailoutRadius = bailoutRadius;
         }
 
-        public int GetIterationCount(Complex c)
+        public override Complex SetZ(Complex point)
         {
-            int iterations = 0;
-            Complex z = Complex.Zero;
-            while (z.Magnitude < _bailoutRadius && iterations < _maxIterations)
-            {
-                z = (z * z) + c;
-                iterations++;
-            }
-            return iterations;
+            return Complex.Zero;
+        }
+
+        public override Complex SetC(Complex point)
+        {
+            return point;
+        }
+
+        public override Complex SequenceRule(Complex z, Complex c)
+        {
+            return (z * z) + c;
         }
     }
 }
