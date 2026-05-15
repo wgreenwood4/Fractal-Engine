@@ -1,5 +1,5 @@
-﻿using FractalEngine.Core.Computation;
-using FractalEngine.Core.Fractals;
+﻿using FractalEngine.Core.Fractals;
+using FractalEngine.Core.Rendering;
 using System.Numerics;
 
 namespace FractalEngine.Cli
@@ -11,49 +11,39 @@ namespace FractalEngine.Cli
             int maxIterations = 200;
             double bailoutRadius = 2.0;
 
-            IFractal mandelbrot = new MandelbrotFractal(maxIterations, bailoutRadius);
-
-            /*
-            Console.WriteLine($"Max Iterations: {maxIterations}");
-            Console.WriteLine($"Bailout Radius: {bailoutRadius}");
-            Console.WriteLine($"Test Point: {testPoint.ToString()}");
-            Console.WriteLine($"-----------------------------------------");
-            Console.WriteLine($"Iterations: {iterations}");
-            if (iterations < maxIterations)
-            {
-                Console.WriteLine("DIVERGED -> NOT IN MANDELBROT SET");
-            }
-            else
-            {
-                Console.WriteLine("CONTAINED -> IN MANDELBROT SET");
-            }
-            */
+            Fractal mandelbrot = new MandelbrotFractal(maxIterations, bailoutRadius);
+            Fractal julia = new JuliaFractal(
+                new Complex(-0.8, 0.156),
+                maxIterations,
+                bailoutRadius
+            );
 
             int width = 140;
             int height = 70;
-            double min = -1 * bailoutRadius;
-            double max = bailoutRadius;
+            Complex center = new Complex(0.0, 0.0);
+            double planeWidth = 3.5;
+            Viewport viewport = new Viewport(
+                width,
+                height,
+                center,
+                planeWidth
+            );
 
             Console.WriteLine();
+
+            Complex pt;
+            string shades = " .:-=+*#%@";
 
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    double re = min + ((double)j / width) * (max - min);
-                    double im = min + ((double)i / height) * (max - min);
-                    Complex pt = new Complex(re, im);
+                    pt = viewport.PixelToPoint(j, i);
 
-                    int iterations = mandelbrot.GetIterationCount(pt);
+                    int iterations = julia.GetIterationCount(pt);
 
-                    if (iterations < maxIterations)
-                    {
-                        Console.Write(" ");
-                    }
-                    else
-                    {
-                        Console.Write("*");
-                    }
+                    int index = (iterations * (shades.Length - 1)) / maxIterations;
+                    Console.Write(shades[index]);
                 }
                 Console.WriteLine();
             }
